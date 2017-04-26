@@ -24,13 +24,17 @@ public:
         }
         int c=0,v;
         ListNode *head = new ListNode(0);
-        ListNode *tail = new ListNode(0)；
+        ListNode *tail = NULL;
+        head->next = tail;
         while(!s1.empty() && !s2.empty()){
             v = s1.top()+s2.top()+c;
             c = v/10;
             v = v%10;
-
             ListNode temp(v);
+            head->next = temp;
+            temp->next = tail;
+            tail = temp;
         }
+        return head->next;
     }
 };
