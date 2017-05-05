@@ -27,7 +27,7 @@ public:
         int i = timePoints.size()-1;
         t2 = ((timePoints[i][0]-'0')*10+(timePoints[i][1]-'0'))*60 + (timePoints[i][3]-'0')*10+(timePoints[i][4]-'0');
         t1 = ((timePoints[0][0]-'0')*10+(timePoints[0][1]-'0'))*60 + (timePoints[0][3]-'0')*10+(timePoints[0][4]-'0');
-        diff = abs(t2-t1);
+        diff = min(t2-t1,24*60-t2+t1);
         if(diff<min) min=diff;
 
         return diff;
