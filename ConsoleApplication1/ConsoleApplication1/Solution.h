@@ -1,10 +1,50 @@
 #pragma once
+
 class Solution
 {
 public:
+
+	vector<int> findRightInterval(vector<vector<int>>& intervals)
+	{
+		vector<int> result(intervals.size());
+		unordered_map<int, int> map; //
+		for (int i = 0; i < intervals.size();i++)
+		{
+			map[intervals[i][0]] = i;
+		}
+		sort(intervals.begin(), intervals.end(), [](vector<int> v1, vector<int> v2) {return v1[0] < v2[0]; });
+		for (int i = 0; i < intervals.size(); i++)
+		{
+			int start = intervals[i][0];
+			int end = intervals[i][1];
+			int l = 0, r = intervals.size() - 1;
+			int find = r + 1;
+			while(l<=r)
+			{
+				int mid = (l + r) / 2;
+				 if(intervals[mid][0]<end)
+				 {
+					 l = mid + 1;
+				 }
+				 else
+				 {
+					 r = mid - 1;
+					 find = min(mid, find);
+				 }
+			}
+			if (find != intervals.size())
+				result[map[intervals[i][0]]] = (map[intervals[find][0]]);
+			else
+				result[map[intervals[i][0]]] = -1;
+
+		}
+		return result;
+	}
+
+
 	vector<int> partial_sum;
 	int sum = 0;
-	Solution(vector<int>& w) {
+	void pickIndex(vector<int>& w) {
 		for (int x : w) {
 			sum += x;
 			partial_sum.push_back(sum);
