@@ -3,6 +3,114 @@
 class Solution
 {
 public:
+	int sum = 0;
+
+	struct TreeNode {
+		int val;
+		TreeNode *left;
+		TreeNode *right;
+		TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+		
+	};
+
+
+
+	void MergeSort(vector<int> &v)
+	{
+		MergeSortInneer(v, 0, v.size());
+	}
+	void MergeSortInneer(vector<int> &v, int l, int r)
+	{
+		if (l >= r) return;
+		if(l<r)
+		{
+			int mid = (l + r) / 2;
+			MergeSortInneer(v, l, mid);
+			MergeSortInneer(v, mid + 1, r);
+			Merge(v, l, mid, r);
+		}
+	}
+	void Merge(vector<int> &v, int l, int mid, int r)
+	{
+		vector<int> a(v.begin() + l, v.begin() + mid);
+		vector<int> b(v.begin() + mid+1 , v.begin() + r);
+		int i = l, i1 = l, i2 = mid + 1;
+		while(i1<=mid && i2<=r)
+		{
+			if (a[i1] < b[i2]) v[i++] = a[i1++];
+			else v[i++] = b[i2++];
+		}
+		while (i1 <= mid) v[i++] = a[i1++];
+		while (i2 <= r) v[i++] = b[i2++];
+
+	}
+	void QuickSort(vector<int> &v)
+	{
+		QuickSortInner(v, 0, v.size() - 1);
+	}
+
+	void QuickSortInner(vector<int> &v, int l, int r)
+	{
+		if (l <= r) return;
+
+		int flag = l;
+		int left = l + 1, right = r;
+		while(left<right)
+		{
+			while (v[left] <= v[flag])left++;
+			while (v[right >= v[flag]]) right--;
+			if (left <= right) swap(v[left], v[right]);
+		}
+		swap(v[left], v[flag]);
+		QuickSortInner(v, l, left - 1);
+		QuickSortInner(v, left + 1, r);
+	}
+
+	bool isSubtree(TreeNode* s, TreeNode* t)
+	{
+		if (s == nullptr && t == nullptr) return true;
+		if (s == nullptr || t == nullptr) return false;
+
+		bool a = false;
+		if (s->val == t->val)
+		{
+			a = isSameTree(s, t);
+		}
+		return a || isSubtree(s->left, t) || isSubtree(s->right, t);
+	}
+	bool isSameTree(TreeNode* s, TreeNode* t)
+	{
+		if (s == nullptr && t == nullptr) return true;
+		if (s == nullptr || t == nullptr)return false;
+		if (s->val != t->val) return false;
+		return isSameTree(s->left, t->left) && isSameTree(s->right, t->right);
+
+	}
+	int findTilt(TreeNode* root)
+	{
+		dfs(root);
+		return sum;
+	}
+	int dfs(TreeNode* root)
+	{
+		if (root == nullptr)
+		{
+			return 0;
+		}
+		int l = 0, r = 0;
+		if (root->left != nullptr)
+		{
+			l = findTilt(root->left);
+		}
+		if (root->right != nullptr)
+		{
+			r = findTilt(root->right);
+		}
+		sum += abs(l - r);
+		return l + r + root->val;
+	}
+
+
 	vector<int> findClosestElements(vector<int>& arr, int k, int x) 
 	{
 		int l = 0, r = arr.size() - 1;
@@ -65,7 +173,6 @@ public:
 
 
 	vector<int> partial_sum;
-	int sum = 0;
 	void pickIndex(vector<int>& w) {
 		for (int x : w) {
 			sum += x;
